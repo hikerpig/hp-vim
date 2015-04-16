@@ -1,6 +1,6 @@
-"if exists("g:loaded_require_formatter")
-"  finish
-"endif
+if exists("g:loaded_require_formatter")
+  finish
+endif
 let g:loaded_require_formatter = 1
 
 "Function: :format
@@ -15,28 +15,33 @@ import re
 # prepare
 buffer = vim.current.buffer
 vrange = vim.current.range
-require_pattern = re.compile(r'(?P<left>\s*[\w\d_]+\s?)=\s*require(?P<right>[\w\d\"\'\s\(\)\-\/]+)')
-assign_pattern = re.compile(r'(?P<left>\s*[\w\d_]+\s?)[=:]\s*(?P<right>[\w\d\"\'\s\(\)\-\/]+)')
+require_pattern = re.compile(r'(?P<left>\s*[\w\d_]+\s?)=\s*require(?P<right>[\w\d\"\'\s\(\)\-\/\.]+)')
+assign_pattern = re.compile(r'(?P<left>\s*[\w\d_]+\s?)[=:]\s*(?P<right>[\w\d\"\'\s\(\)\-\/\.]+)')
 g_pattern = require_pattern
 g_matches = []
 g_seperator = '='
 
-vst = buffer.mark('<')[0] - 1
-vend = buffer.mark('>')[0]
+vst = 0
+vend = 0
+start_mark = buffer.mark('<')
+end_mark = buffer.mark('>')
+if start_mark:
+    vst = start_mark[0] - 1
+    if end_mark:
+        vend = end_mark[0]
 cursor = vim.current.window.cursor
 cend = cursor[0]
-# http://liangxh2008.blog.163.com/blog/static/11241167920104209364393/
 lines = buffer[0:]
 g_start_line = 0
 if vst and vend:
-  if vend == cend:
-    lines = buffer[vst:vend]
-    g_start_line = vst
-    g_pattern = assign_pattern
-    g_seperator = re.compile('[=:]')
-    #print 'vstart is', vst
-    #print 'vend is', vend
-    #print lines
+    if vend == cend:
+        lines = buffer[vst:vend]
+        g_start_line = vst
+        g_pattern = assign_pattern
+        g_seperator = re.compile('[=:]')
+        #print 'vstart is', vst
+        #print 'vend is', vend
+        #print lines
 
 def get_formated_line(text, left_len, seperator='='):
     """
@@ -47,13 +52,13 @@ def get_formated_line(text, left_len, seperator='='):
 
     """
     if hasattr(seperator, 'match'):
-      match = seperator.search(text)
-      if match:
-        epos = match.start()
-      else:
-        return text
+        match = seperator.search(text)
+        if match:
+            epos = match.start()
+        else:
+            return text
     else:
-      epos = text.find(seperator)
+        epos = text.find(seperator)
     left_str = text[0:epos]
     remained = text[epos:]
     short_of_len = left_len - len(left_str)
@@ -93,9 +98,9 @@ def start(lines):
 
 # start
 try:
-  start(lines)
+    start(lines)
 except Exception as exp:
-  print exp
+    print exp
 
 EOF
 endfunc
