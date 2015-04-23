@@ -15,8 +15,8 @@ import re
 # prepare
 buffer = vim.current.buffer
 vrange = vim.current.range
-require_pattern = re.compile(r'(?P<left>\s*[\w\d_]+\s?)=\s*require(?P<right>[\w\d\"\'\s\(\)\-\/\.]+)')
-assign_pattern = re.compile(r'(?P<left>\s*[\w\d_]+\s?)[=:]\s*(?P<right>[\w\d\"\'\s\(\)\-\/\.]+)')
+require_pattern = re.compile(r'(?P<left>\s*[\w\d\'\"_]+\s*)=\s*require(?P<right>[\w\d\"\'\s\(\)\-\/\.]+)')
+assign_pattern = re.compile(r'(?P<left>\s*[\w\d\'\"_]+\s*)[=:]\s*(?P<right>[\w\d\"\'\s\(\)\-\/\.]+)')
 g_pattern = require_pattern
 g_matches = []
 g_seperator = '='
@@ -93,8 +93,12 @@ def start(lines):
 
         # replace the line
         real_lineno = i + g_start_line
-        del buffer[real_lineno]
-        buffer.append(fl, real_lineno)
+        replace_line(buffer, fl, real_lineno)
+
+# TODO: both vim and script mode
+def replace_line(obj, new_text, real_lineno):
+    del obj[real_lineno]
+    obj.append(new_text, real_lineno)
 
 # start
 try:
