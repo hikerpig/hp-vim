@@ -1,7 +1,7 @@
 "Function: HP#ToggleCursorColumn
 "Desc:
 "
-func! HP#ToggleCursorColumn()
+func! HP_ToggleCursorColumn()
   if !exists("g:cusorcolumn_existed")
     let g:cusorcolumn_existed = 0
   endif
@@ -16,5 +16,5 @@ func! HP#ToggleCursorColumn()
   endif
 endfunc
 
-nmap ,cl <Esc>:call HP#ToggleCursorColumn()<cr>
+nmap ,cl <Esc>:call HP_ToggleCursorColumn()<cr>
 
