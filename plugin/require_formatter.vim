@@ -39,9 +39,8 @@ if vst and vend:
         g_start_line = vst
         g_pattern = assign_pattern
         g_seperator = re.compile('[=:]')
-        #print 'vstart is', vst
-        #print 'vend is', vend
-        #print lines
+        #print('vstart is', vst)
+        #print(lines)
 
 def get_formated_line(text, left_len, seperator='='):
     """
@@ -104,7 +103,7 @@ def replace_line(obj, new_text, real_lineno):
 try:
     start(lines)
 except Exception as exp:
-    print exp
+    print(exp)
 
 EOF
 endfunc
